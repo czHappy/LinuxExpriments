@@ -1,0 +1,32 @@
+# dhcpd.conf
+#
+# Sample configuration file for ISC dhcpd
+#
+# Attention: If /etc/ltsp/dhcpd.conf exists, that will be used as
+# configuration file instead of this file.
+#
+
+# option definitions common to all supported networks...
+option domain-name "czdhcp.org";
+option domain-name-servers ns1.example.org, ns2.example.org;
+
+default-lease-time 600;
+max-lease-time 7200;
+
+# The ddns-updates-style parameter controls whether or not the server will
+# attempt to do a DNS update when a lease is confirmed. We default to the
+# behavior of the version 2 packages ('none', since DHCP v2 didn't
+# have support for DDNS.)
+ddns-update-style none;
+
+subnet 192.168.56.0 netmask 255.255.255.0 {
+  range 192.168.56.160 192.168.56.190;
+  option domain-name-servers ns1.internal.example.org;
+  option domain-name "internal.czdhcp.org";
+  option subnet-mask 255.255.255.0;
+  option routers 192.168.56.1;
+  option broadcast-address 192.168.56.255;
+  default-lease-time 600;
+  max-lease-time 7200;
+}
+

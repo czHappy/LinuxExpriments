@@ -1,0 +1,5 @@
+---
+- name: restart smbd
+  service: name=smbd state=restarted
+- name: stop smbd
+  service: name=smbd state=stop

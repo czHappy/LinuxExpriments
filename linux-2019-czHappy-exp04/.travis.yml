@@ -1,0 +1,50 @@
+sudo: required
+
+language: sh
+
+before_install:
+    - sudo apt-get update -q
+    - export scversion="stable" # or "v0.4.7", or "latest"
+    - wget "https://storage.googleapis.com/shellcheck/shellcheck-${scversion}.linux.x86_64.tar.xz"
+    - tar --xz -xvf shellcheck-"${scversion}".linux.x86_64.tar.xz
+    - sudo cp shellcheck-"${scversion}"/shellcheck /usr/bin/
+    - /usr/bin/shellcheck --version
+    - wget "https://media.githubusercontent.com/media/CUCCS/linux-2019-jckling/0x04/0x04/Codes/worldcupplayerinfo.tsv"
+    - wget "https://media.githubusercontent.com/media/CUCCS/linux-2019-jckling/0x04/0x04/Codes/web_log.tsv"
+
+script:
+  - bash test.sh
+  - bash exp04/script/ImageProcess.sh -h
+  - bash exp04/script/ImageProcess.sh -f exp04/image/polymagnet.jpg -cq 50
+  - bash exp04/script/ImageProcess.sh -f exp04/image/polymagnet.jpg -cd 50
+  - bash exp04/script/ImageProcess.sh -f exp04/image/people.svg -cf
+  - bash exp04/script/ImageProcess.sh -ap pre -bp exp04/image 
+  - bash exp04/script/logStatsProg.sh -tsh 100
+  - bash exp04/script/logStatsProg.sh -tsi 100
+  - bash exp04/script/logStatsProg.sh -turl 100
+  - bash exp04/script/logStatsProg.sh -sc
+  - bash exp04/script/logStatsProg.sh -urls /shuttle/missions/STS-69/mission-STS-69.html 10
+  - bash exp04/script/WorldCup.sh -ls 20
+  - bash exp04/script/WorldCup.sh -gt 30
+  - bash exp04/script/WorldCup.sh -r 20 30
+  - bash exp04/script/WorldCup.sh -p
+  - bash exp04/script/WorldCup.sh -n
+  - bash exp04/script/WorldCup.sh -a
+
+
+
+after_script:
+  - /usr/bin/shellcheck test.sh
+  - /usr/bin/shellcheck ImageProcess.sh
+  - /usr/bin/shellcheck logStatsProg.sh
+  - /usr/bin/shellcheck WorldCup.sh 
+
+after_failure:
+  - id
+  - pwd
+  - df -h
+  - cat error.log
+
+notifications:
+  email:
+    on_success: never
